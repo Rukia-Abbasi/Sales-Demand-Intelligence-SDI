@@ -1,27 +1,37 @@
 
-name: SDI Data Validation
+name: SDI Data Validation and Warehouse
 
 on:
   workflow_dispatch:
 
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pandas gdown
+        run: pip install pandas duckdb gdown
 
       - name: Download sales dataset
         run: python scripts/download_sales.py
 
       - name: Validate datasets
         run: python scripts/validation.py
+
+      - name: Build warehouse and analytical queries
+        run: python scripts/build_warehouse.py
+
+      - name: Save warehouse and query results
+        uses: actions/upload-artifact@v5
+        with:
+          name: SDI-Warehouse-and-Query-Results
+          path: output/
+          if-no-files-found: error
