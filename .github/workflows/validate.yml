@@ -11,6 +11,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Check repository files
+        run: |
+          pwd
+          ls -la
+          find . -maxdepth 3 -type f
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -26,14 +34,14 @@ jobs:
       - name: Validate datasets
         run: python scripts/validation.py
 
-      - name: Check repository files
+      - name: Check warehouse builder
         run: |
-          pwd
-          ls -la
-          ls -la scripts
+          test -f scripts/build_warehouse.py
+          echo "Warehouse builder file found."
 
       - name: Build warehouse and analytical queries
         run: python scripts/build_warehouse.py
+
       - name: Save warehouse and query results
         uses: actions/upload-artifact@v5
         with:
