@@ -1,0 +1,27 @@
+
+name: SDI Data Validation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pandas gdown
+
+      - name: Download sales dataset
+        run: python scripts/download_sales.py
+
+      - name: Validate datasets
+        run: python scripts/validation.py
