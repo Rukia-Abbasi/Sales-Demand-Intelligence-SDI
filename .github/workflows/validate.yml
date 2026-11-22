@@ -26,9 +26,14 @@ jobs:
       - name: Validate datasets
         run: python scripts/validation.py
 
+      - name: Check repository files
+        run: |
+          pwd
+          ls -la
+          ls -la scripts
+
       - name: Build warehouse and analytical queries
         run: python scripts/build_warehouse.py
-
       - name: Save warehouse and query results
         uses: actions/upload-artifact@v5
         with:
